@@ -95,7 +95,7 @@ class EzqMongo<T> extends EventEmitter {
   }
 
   public async add(data: T | T[]) {
-    if (Array.isArray(data) && data.length > 1000) {
+    if (Array.isArray(data) && data.length > 100) {
       throw new Error('Data array cannot be more than 100');
     }
     const dataArray = Array.isArray(data) ? data : [data];

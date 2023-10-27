@@ -31,7 +31,7 @@ import EzqMongo from 'eazy-queue-mongo-ks';
 
 ### `add(data: T | T[])`
 
-Add data to the queue. You can pass a single item or an array of items.
+Add data to the queue. You can pass a single item or an array of items. in array is limit 100
 
 ### `process(callback: (data: T | undefined) => Promise<void>)`
 
@@ -95,10 +95,6 @@ ezqMongo.on('complete', () => {
 // Clear the queue (use with caution, as it removes all data in the queue) Mongo deleteMany with queueName
 ezqMongo.clearQueue();
 ```
-
-## License
-
-This library is provided under the [MIT License](LICENSE). Feel free to use and modify it in your projects.
 
 ## Issues and Contributions
 
