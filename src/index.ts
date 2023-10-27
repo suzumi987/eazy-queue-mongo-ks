@@ -133,6 +133,7 @@ class EzqMongo<T> extends EventEmitter {
 
   public async clearQueue() {
     this.pause = true;
+    this.queue = [];
     await qModel.deleteMany({ queue_name: this.queueName });
     this.isQueue = false; // Ensure isQueue is set to false when the queue is cleared
     this.isProcess = false;
