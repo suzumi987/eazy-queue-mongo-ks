@@ -1,16 +1,14 @@
 {
   "name": "eazy-queue-mongo-ks",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "",
-  "type": "module",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "engines": {
     "node": ">=16.0.0"
   },
   "scripts": {
-    "test": "jest",
-    "build": "tsc"
+    "test": "jest"
   },
   "keywords": [
     "queue",
@@ -33,16 +31,8 @@
     "bracketSpacing": true
   },
   "devDependencies": {
-    "@types/jest": "^29.5.6",
-    "@types/node": "^20.8.8",
-    "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "@typescript-eslint/parser": "^6.9.0",
-    "eslint": "^8.52.0",
     "jest": "^29.7.0",
-    "prettier": "^3.0.3",
-    "ts-jest": "^29.1.1",
-    "typescript": "^5.2.2",
-    "undici-types": "^5.26.5"
+    "prettier": "^3.0.3"
   },
   "jest": {
     "verbose": true,

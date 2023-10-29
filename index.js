@@ -1,5 +1,6 @@
-import { EventEmitter } from 'events';
-import mongoose, { Schema } from 'mongoose';
+const { EventEmitter } = require('events');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const qSchema = new Schema({
   queue_name: String,
@@ -9,29 +10,19 @@ const qSchema = new Schema({
 
 const qModel = mongoose.model('ezqueue', qSchema, 'ezqueue');
 
-interface IQueue<T> {
-  _id: mongoose.Types.ObjectId;
-  queue_name: string;
-  data: T;
-  created: Date;
-}
-
-class EzqMongo<T> extends EventEmitter {
-  private isProcess = false;
-  private isQueue = false;
-  private pause = false;
-  private queue: IQueue<T>[];
-
-  constructor(
-    private queueName: string = 'ezq',
-    private stackLimit: number = 1,
-  ) {
+class EzqMongo extends EventEmitter {
+  constructor(queueName = 'ezq', stackLimit = 1) {
     super();
     this.queue = [];
+    this.isProcess = false;
+    this.isQueue = false;
+    this.pause = false;
+    this.queueName = queueName;
+    this.stackLimit = stackLimit;
     this.ckQ();
   }
 
-  private async ckQ() {
+  async ckQ() {
     this.pause = true;
     const queueCount = await this.checkQueue();
     this.isQueue = queueCount > 0;
@@ -48,7 +39,7 @@ class EzqMongo<T> extends EventEmitter {
     this.pause = false;
   }
 
-  public async checkQueue() {
+  async checkQueue() {
     const [agg] = await qModel.aggregate([
       {
         $match: {
@@ -85,16 +76,16 @@ class EzqMongo<T> extends EventEmitter {
       },
     ]);
 
-    const { c, queue }: { c: { count: number }; queue: IQueue<T>[] } = agg;
+    const { c, queue } = agg;
     if (c.count && this.queue.length === 0) {
       this.queue = queue;
-      const mapId = queue.map((f: IQueue<T>) => f._id);
+      const mapId = queue.map((f) => f._id);
       await qModel.deleteMany({ _id: { $in: mapId } });
     }
     return c.count;
   }
 
-  public async add(data: T | T[]) {
+  async add(data) {
     if (Array.isArray(data) && data.length > 100) {
       throw new Error('Data array cannot be more than 100');
     }
@@ -113,7 +104,7 @@ class EzqMongo<T> extends EventEmitter {
     }
   }
 
-  public async process(callback: (data: T | undefined) => Promise<void>) {
+  async process(callback) {
     this.isProcess = true;
 
     while (this.queue.length > 0) {
@@ -131,7 +122,7 @@ class EzqMongo<T> extends EventEmitter {
     }
   }
 
-  public async clearQueue() {
+  async clearQueue() {
     this.pause = true;
     this.queue = [];
     await qModel.deleteMany({ queue_name: this.queueName });
@@ -141,4 +132,4 @@ class EzqMongo<T> extends EventEmitter {
   }
 }
 
-export default EzqMongo;
+module.exports = EzqMongo;
