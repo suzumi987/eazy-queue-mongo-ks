@@ -2,6 +2,8 @@ const { EventEmitter } = require('events');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+
 const qSchema = new Schema({
   queue_name: String,
   data: mongoose.SchemaTypes.Mixed,

@@ -22,6 +22,12 @@ es2015:
 import EzqMongo from 'eazy-queue-mongo-ks';
 ```
 
+```javascript
+
+please set your mongodb connection in env MONGO_URL
+
+```
+
 ## API
 
 ### `new EzqMongo(queueName?: string, stackLimit?: number)`
